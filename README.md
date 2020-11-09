@@ -1,24 +1,74 @@
-# README
+# テーブル設計
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## users テーブル
 
-Things you may want to cover:
+| Column             | Type   | Options     |
+| ------------------ | ------ | ----------- |
+| nickname           | string | null: false |
+| email              | string | null: false |
+| encrypted_password | string | null: false |
+| position_id        | integer| null: false |
 
-* Ruby version
 
-* System dependencies
+### Association
 
-* Configuration
+- has_many :messages
+- has_many :events
+- has_many :room_users
+- has_many :rooms, through: :room_users
 
-* Database creation
+## rooms テーブル
 
-* Database initialization
+| Column             | Type       | Options           |
+| ------------------ | ---------- | ----------------- |
+| team_name          | string     | null: false       |
+| password_digest    | string     | null: false       |
 
-* How to run the test suite
+### Association
 
-* Services (job queues, cache servers, search engines, etc.)
+- has_many :messages
+- has_many :events
+- has_many :room_users
+- has_many :users, through: :room_users
 
-* Deployment instructions
 
-* ...
+## room_users テーブル
+
+| Column             | Type       | Options           |
+| ------------------ | ---------- | ----------------- |
+| room               | references | foreign_key: true |
+| user               | text       | foreign_key: true |
+
+### Association
+
+- belongs_to :user
+- belongs_to :room
+
+## messages テーブル
+
+| Column             | Type       | Options           |
+| ------------------ | ---------- | ----------------- |
+| content            | text       | null: false       |
+| room               | references | foreign_key: true |
+| user               | references | foreign_key: true |
+
+
+### Association
+
+belongs_to :user
+belongs_to :room
+
+## events テーブル
+
+| Column             | Type       | Options           |
+| ------------------ | ---------- | ----------------- |
+| title              | string     | null: false       |
+| content            | text       | null: false       |
+| start_time         | datetime   | null: false       |
+| user               | references | foreign_key: true |
+| room               | references | foreign_key: true |
+
+### Association
+
+- belongs_to :user
+- belongs_to :room
